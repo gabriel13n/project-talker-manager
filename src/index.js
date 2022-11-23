@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { readTalkerData } = require('./utils/fsUtils')
-
+const { readTalkerData } = require('./utils/fsUtils');
+const generateToken = require('./token');
 
 const app = express();
 app.use(bodyParser.json());
@@ -22,6 +22,23 @@ app.listen(PORT, () => {
 //
 
 app.get('/talker', async (req, res) => {
-  const allTalkers = await readTalkerData()
+  const allTalkers = await readTalkerData();
   return res.status(HTTP_OK_STATUS).json(allTalkers);
-})
+});
+
+app.get('/talker/:id', async (req, res) => {
+  const { id } = req.params;
+  const allTalkers = await readTalkerData();
+  const findTalkerById = allTalkers.find((talker) => talker.id === Number(id));
+  
+  if (!findTalkerById) {
+    res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  } else {
+    res.status(HTTP_OK_STATUS).json(findTalkerById);
+  }
+});
+
+app.post('/login', (req, res) => {
+  const token = generateToken();
+  return res.status(200).json({ token });
+});
