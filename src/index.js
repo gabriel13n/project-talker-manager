@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { readTalkerData, writeTalkerData, deleteTalker } = require('./utils/fsUtils');
+const { readTalkerData, writeTalkerData, deleteTalker, editedTalker } = require('./utils/fsUtils');
 const generateToken = require('./token');
 const validateEmail = require('./middlewares/validateEmail');
 const validatePassword = require('./middlewares/validatePassword');
@@ -76,20 +76,21 @@ app.post('/talker',
 });
 
 // O endpoint deve ser capaz de editar uma pessoa palestrante com base no id da rota, sem alterar o id registrado.
-// app.put('/talker/:id',
-//   validateToken,
-//   validateName,
-//   validateAge,
-//   validateTalk,
-//   validateWatchAt,
-//   validateRate,
-//  async (req, res) => {
-//   const { id } = req.params;
-//   const { name, age, talk } = req.body;
-//   const editedTalker = await editTalker(id, name, age, talk);
+app.put('/talker/:id',
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateWatchAt,
+  validateRate,
+ async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  const result = await editedTalker(id, name, age, talk);
+  console.log(result);
 
-//   res.status(HTTP_OK_STATUS).json(editedTalker);
-// });
+  res.status(HTTP_OK_STATUS).json(result);
+});
 
 app.delete('/talker/:id', validateToken, async (req, res) => {
   const { id } = req.params;

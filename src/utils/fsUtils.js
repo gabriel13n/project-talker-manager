@@ -28,18 +28,22 @@ async function writeTalkerData(newTalker) {
   }
 }
 
-// const editTalker = async (id, name, age, talk) => {
-//   const dataTalkers = await readTalkerData();
-//   const talkerId = dataTalkers.map((talker) => {
-//     if (talker.id === Number(id)) {
-//       return { ...talker, name, age, talk };
-//     }
-//     return talker;
-//   });
-//   const talkerEdited = JSON.stringify(talkerId, null, 2);
-//   await writeFile(path.resolve(__dirname, talkersDataPath), talkerEdited);
-//   return { id: Number(id), name, age, talk };
-// };
+const editedTalker = async (id, name, age, talk) => {
+  const talkers = await readTalkerData();
+  const update = talkers.map((talker) => {
+  if (talker.id === Number(id)) {
+    return {
+      ...talker,
+      name,
+      age,
+      talk,
+    };
+  } return talker;
+  });
+  const alteredTalker = JSON.stringify(update, null, 2);
+  await fs.writeFile(path.resolve(__dirname, talkersDataPath), alteredTalker);
+  return { id: Number(id), name, age, talk };
+};
 
 const deleteTalker = async (id) => {
   const dataTalkers = await readTalkerData();
@@ -53,5 +57,5 @@ module.exports = {
   readTalkerData,
   writeTalkerData,
   deleteTalker,
-  // editTalker,
+  editedTalker,
 };
