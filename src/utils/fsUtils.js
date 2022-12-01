@@ -1,4 +1,5 @@
 const fs = require('fs').promises;
+// const { writeFile } = require('fs');
 const path = require('path');
 
 const talkersDataPath = '../talker.json';
@@ -27,15 +28,17 @@ async function writeTalkerData(newTalker) {
   }
 }
 
-// const editDataTalker = async (id, body) => {
-//   const dataTalker = await readTalkerData();
-//   const editTalker = { id: Number(id), ...body };
-//   const findIndex = dataTalker.findIndex((talker) => talker.id === Number(id));
-//   dataTalker.splice(findIndex, 1, editTalker);
-
-//   await fs.writeFile(path.resolve(__dirname, talkersDataPath), dataTalker);
-
-//   return editTalker;
+// const editTalker = async (id, name, age, talk) => {
+//   const dataTalkers = await readTalkerData();
+//   const talkerId = dataTalkers.map((talker) => {
+//     if (talker.id === Number(id)) {
+//       return { ...talker, name, age, talk };
+//     }
+//     return talker;
+//   });
+//   const talkerEdited = JSON.stringify(talkerId, null, 2);
+//   await writeFile(path.resolve(__dirname, talkersDataPath), talkerEdited);
+//   return { id: Number(id), name, age, talk };
 // };
 
 const deleteTalker = async (id) => {
@@ -50,4 +53,5 @@ module.exports = {
   readTalkerData,
   writeTalkerData,
   deleteTalker,
+  // editTalker,
 };

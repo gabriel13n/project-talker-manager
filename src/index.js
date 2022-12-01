@@ -31,6 +31,16 @@ app.listen(PORT, () => {
 });
 //
 
+app.get('/talker/search', validateToken, async (req, res) => {
+  const { q } = req.query;
+  const dataTalkers = await readTalkerData();
+  const filter = dataTalkers.filter((t) => t.name.includes(q));
+  if (q === undefined) {
+    return res.status(HTTP_OK_STATUS).json(dataTalkers);
+  }
+  return res.status(HTTP_OK_STATUS).json(filter);
+ });
+
 app.get('/talker', async (req, res) => {
   const allTalkers = await readTalkerData();
   return res.status(HTTP_OK_STATUS).json(allTalkers);
@@ -66,7 +76,7 @@ app.post('/talker',
 });
 
 // O endpoint deve ser capaz de editar uma pessoa palestrante com base no id da rota, sem alterar o id registrado.
-// app.post('/talker:id',
+// app.put('/talker/:id',
 //   validateToken,
 //   validateName,
 //   validateAge,
@@ -75,9 +85,10 @@ app.post('/talker',
 //   validateRate,
 //  async (req, res) => {
 //   const { id } = req.params;
-//   const talker = req.body;
-//   const dataTalkerAtt = await editDataTalker(id, talker);
-//   res.status(200).json(dataTalkerAtt); 
+//   const { name, age, talk } = req.body;
+//   const editedTalker = await editTalker(id, name, age, talk);
+
+//   res.status(HTTP_OK_STATUS).json(editedTalker);
 // });
 
 app.delete('/talker/:id', validateToken, async (req, res) => {
